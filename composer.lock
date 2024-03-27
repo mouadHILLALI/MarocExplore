@@ -4814,7 +4814,11 @@
             "description": "Executes commands in sub-processes",
             "homepage": "https://symfony.com",
             "support": {
+<<<<<<< HEAD
                 "source": "https://github.com/symfony/process/tree/v6.4.4"
+=======
+                "source": "https://github.com/symfony/process/tree/v7.0.4"
+>>>>>>> c171594ac7350153c2511fc83cfcd3549ed96a5e
             },
             "funding": [
                 {
