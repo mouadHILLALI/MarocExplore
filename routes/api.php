@@ -1,8 +1,10 @@
 <?php
 
+use App\Http\Controllers\DestinationController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\TrajectoryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,13 +24,15 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 
 Route::post('/User/register',[ProfileController::class , 'register']);
-Route::post('User/Login',[ProfileController::class , 'login']);
-
-Route::get('/index' , function (){
-    return response()->json('hello') ;
-});
+Route::post('/User/Login',[ProfileController::class , 'login']);
 
 
-Route::middleware('auth')->group(function(){
 
+Route::middleware('auth:sanctum')->group(function(){
+    Route::post('/Trajectory/Create',[TrajectoryController::class , 'createTrajectory']);
+    Route::post('/Trajectory/Edit',[TrajectoryController::class , 'editTrajectory']);
+    Route::post('/Destination/Create',[DestinationController::class , 'addDestination']);
+    Route::get('/Trajectory/Show',[TrajectoryController::class , 'index']);
+    Route::get('/Trajectory/Search',[TrajectoryController::class , 'search']);
+    Route::get('/Trajectory/Filter',[TrajectoryController::class , 'filter']);
 });

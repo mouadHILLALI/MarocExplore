@@ -7,6 +7,16 @@ use Illuminate\Http\Request;
 
 class TrajectoryController extends Controller
 {
+
+    public function index(){
+        $trajectories = Trajectory::get();
+        return response()->json(
+            [
+                'status'=> 200 ,
+                'content' => $trajectories,
+            ]
+            );
+    }
     public function createTrajectory(Request $r){
         try {
             Trajectory::create([
@@ -43,5 +53,32 @@ class TrajectoryController extends Controller
         } catch (\Throwable $th) {
             return response()->json('Unable to update the trajectory', 500);
         }
+    }
+
+    public function search(Request $r){
+        try {
+            $trajectory = Trajectory::where('title' , $r->title)->first();
+            if ($trajectory) {
+                return response()->json(['status' => 200, 'content' => $trajectory]);
+            } else {
+                return response()->json('not found');
+            }
+        } catch (\Throwable $th) {
+            return response()->json(['status'=>500, 'content'=>'something went wrong']);
+        }
+    }
+    public function filter(Request $r){
+
+        try {
+            $trajectories = Trajectory::where('category_id' , $r->category_id)->get();
+        if($trajectories){
+            return response()->json(['status'=> 200 , 'content'=> $trajectories]) ;
+        }else{
+            return response('no trajectories in this category');
+        }
+        } catch (\Throwable $th) {
+            return response()->json(['status'=>500 , 'content'=>'something went wrong']);
+        }
+        
     }
 }

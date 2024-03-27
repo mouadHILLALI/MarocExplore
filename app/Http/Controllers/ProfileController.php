@@ -21,7 +21,8 @@ class ProfileController extends Controller
                 'password' => Hash::make($r->password),
             ]);
             Auth::login($user, $remember = true);
-            return response('Registerd succesfully', 200);
+            $token = $user->createToken('token')->plainTextToken;
+            return response()->json(['status'=>200 , 'token'=>$token , 'content'=>'registerd succesfully']);
         }
         } catch (\Throwable $th) {
             abort(500);
@@ -34,8 +35,8 @@ class ProfileController extends Controller
             $user = User::where('email', $r->email)->first();
             if ($user && Hash::check($r->password, $user->password)) {
                 Auth::login($user, $remember = true);
-                return response('Logged in successfully', 200)
-                    ->header('Content-Type', 'text/plain');
+                $token = $user->createToken('token')->plainTextToken;
+                return response()->json(['status'=>200,'token' =>$token, 'content' => 'logged in succesfully']);
             } else {
                 return response('Wrong credentials', 500)
                     ->header('Content-Type', 'text/plain');
