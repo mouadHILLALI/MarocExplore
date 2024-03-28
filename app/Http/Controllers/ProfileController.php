@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\LoginRequest;
+use App\Http\Requests\RegisterRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -9,9 +11,9 @@ use Illuminate\Support\Facades\Hash;
 
 class ProfileController extends Controller
 {
-    public function register(Request $r){
+    public function register(RegisterRequest $r){
         try {
-            $email_exist = User::where('email', $r->email)->first();
+        $email_exist = User::where('email', $r->email)->first();
         if($email_exist){
             return response('Email already exists', 200);
         } else {
@@ -29,7 +31,7 @@ class ProfileController extends Controller
         }
         
     }
-    public function login(Request $r)
+    public function login(LoginRequest $r)
     {
         try {
             $user = User::where('email', $r->email)->first();

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\TrajectoryRequest;
 use App\Models\Trajectory;
 use Illuminate\Http\Request;
 
@@ -17,7 +18,7 @@ class TrajectoryController extends Controller
             ]
             );
     }
-    public function createTrajectory(Request $r){
+    public function createTrajectory(TrajectoryRequest $r){
         try {
             Trajectory::create([
             'title' =>$r->title,
