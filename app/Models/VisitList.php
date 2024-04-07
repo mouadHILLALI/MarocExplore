@@ -5,18 +5,15 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Destination extends Model
+class VisitList extends Model
 {
     use HasFactory;
-    protected $table = 'destinations';
+    protected $table = 'visites';
     protected $fillable = [
-        'city',
-        'hotel',
-        'food',
-        'monument',
+        'user_id',
         'trajectory_id',
     ];
-    public function trajectory(){
+    public function Trajectory(){
         return $this->belongsTo(Trajectory::class , 'trajectory_id');
     }
 }

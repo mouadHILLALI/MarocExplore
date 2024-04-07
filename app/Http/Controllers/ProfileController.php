@@ -11,25 +11,31 @@ use Illuminate\Support\Facades\Hash;
 
 class ProfileController extends Controller
 {
-    public function register(RegisterRequest $r){
+    public function register(RegisterRequest $r)
+    {
         try {
-        $email_exist = User::where('email', $r->email)->first();
-        if($email_exist){
-            return response('Email already exists', 200);
-        } else {
-            $user = User::create([
-                'name' => $r->name,
-                'email' => $r->email, 
-                'password' => Hash::make($r->password),
-            ]);
-            Auth::login($user, $remember = true);
-            $token = $user->createToken('token')->plainTextToken;
-            return response()->json(['status'=>200 , 'token'=>$token , 'content'=>'registerd succesfully']);
+            $email_exist = User::where('email', $r->email)->first();
+            if (!$email_exist) {
+                $user = User::create([
+                    'name' => $r->name,
+                    'email' => $r->email,
+                    'password' => Hash::make($r->password),
+                ]);
+                Auth::login($user, $remember = true);
+                $token = $user->createToken('token')->plainTextToken;
+                return response()->json(['token'=>$token], 200);
+            } else {
+                return response()->json('Email already exists', 403);
+            }
+        } catch (\Exception $e) {
+            return response()->json(
+                [
+                    'status' => 'error' ,
+                    'message' => 'error encounterd' ,
+                    'error' => $e->getMessage(),
+                ] , 500
+                );
         }
-        } catch (\Throwable $th) {
-            abort(500);
-        }
-        
     }
     public function login(LoginRequest $r)
     {
@@ -38,7 +44,7 @@ class ProfileController extends Controller
             if ($user && Hash::check($r->password, $user->password)) {
                 Auth::login($user, $remember = true);
                 $token = $user->createToken('token')->plainTextToken;
-                return response()->json(['status'=>200,'token' =>$token, 'content' => 'logged in succesfully']);
+                return response()->json(['status' => 200, 'token' => $token, 'content' => 'logged in succesfully']);
             } else {
                 return response('Wrong credentials', 500)
                     ->header('Content-Type', 'text/plain');
@@ -47,5 +53,10 @@ class ProfileController extends Controller
             return response('Unexpected error occurred', 500)
                 ->header('Content-Type', 'text/plain');
         }
-    }    
+    }
+    public function logout(Request $r)
+    {
+        $r->user()->currentAccessToken()->delete();
+        return response()->json(['message' => 'Successfully logged out', 'status' => true], 200);
+    }
 }

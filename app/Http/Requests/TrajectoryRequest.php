@@ -24,7 +24,7 @@ class TrajectoryRequest extends FormRequest
         return [
             'title' =>'string|required|max:255' , 
             'start_date'=>'required' , 
-            'end_date' =>'required'
+            'end_date' =>'required',
         ];
     }
 }

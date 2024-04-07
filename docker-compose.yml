@@ -24,6 +24,7 @@ services:
             DB_PASSWORD: '${DB_PASSWORD}'
         volumes:
             - '.:/var/www/html'
+            - './storage:/var/www/html/storage'
         networks:
             - sail
         depends_on:

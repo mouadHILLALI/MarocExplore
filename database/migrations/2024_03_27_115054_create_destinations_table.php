@@ -13,9 +13,10 @@ return new class extends Migration
     {
         Schema::create('destinations', function (Blueprint $table) {
             $table->id();
-            $table->string('departure_city');
-            $table->string('arrival_city');
+            $table->string('city');
             $table->string('hotel');
+            $table->string('food');
+            $table->string('monument');
             $table->foreignId('trajectory_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });

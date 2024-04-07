@@ -7,18 +7,24 @@ use Illuminate\Http\Request;
 
 class DestinationController extends Controller
 {
-    public function addDestination(Request $r)
-        {
-            try {
-               Destination::create([
-                'departure_city' => $r->departure_city ,
-                'arrival_city' => $r->arrival_city ,
-                'hotel' => $r->hotel ,
-                'route_id'=> $r->route_id ,
-               ]) ;
-               return response()->json('Destination added succesfully' , 200); 
-            } catch (\Throwable $th) {
-                return response()->json('unable to add Destination', 500); 
-            } 
-        }
+    public function addDestination(Request $request, $id)
+    {   
+        try {
+            $requestData = $request->input();
+            
+            foreach ($requestData as $req) {
+                Destination::create([
+                    'city' => $req['city'],
+                    'hotel' => $req['hotel'],
+                    'food' => $req['food'],
+                    'monument' => $req['monument'],
+                    'trajectory_id' => $id,
+                ]);
+            }
+            
+            return response()->json('Destination added successfully', 200); 
+        } catch (\Exception $e) {
+            return response()->json($e->getMessage(), 500); 
+        } 
+    }
 }
