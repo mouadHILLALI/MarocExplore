@@ -30,6 +30,7 @@ Route::post('/User/Login',[ProfileController::class , 'login']);
 
 Route::get('/Trajectory/Search',[TrajectoryController::class , 'search']);
 Route::get('/Trajectory/Filter',[TrajectoryController::class , 'filter']);
+Route::get('/Trajectory/all',[TrajectoryController::class , 'all']);
 
 Route::get('/categories/show', [CategoryController::class , 'show']);
 Route::middleware('auth:sanctum')->group(function(){

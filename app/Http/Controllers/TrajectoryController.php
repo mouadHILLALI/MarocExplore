@@ -21,6 +21,11 @@ class TrajectoryController extends Controller
         ]);
     }
 
+    public function all(){
+        $trajectories = Trajectory::get();
+        return response()->json(['data'=>$trajectories],200);
+    }
+
     public function createTrajectory(TrajectoryRequest $r)
     {
         try {
@@ -87,16 +92,20 @@ class TrajectoryController extends Controller
     }
     public function filter(Request $r)
     {
-
         try {
-            $trajectories = Trajectory::where('category_id', $r->category_id)->get();
-            if ($trajectories) {
+            if($r->filter=="all"){
+                $trajectories = Trajectory::get();
                 return response()->json(['status' => 200, 'content' => $trajectories]);
-            } else {
-                return response('no trajectories in this category');
+            }else{
+                $trajectories = Trajectory::where('category_id', $r->filter)->get();
+                if ($trajectories) {
+                    return response()->json(['status' => 200, 'content' => $trajectories]);
+                } else {
+                    return response('no trajectories in this category');
+                }
             }
-        } catch (\Throwable $th) {
-            return response()->json(['status' => 500, 'content' => 'something went wrong']);
+        } catch (\Exception $e) {
+            return response()->json(['status' => 500, 'content' => $e->getMessage()]);
         }
     }
 }
